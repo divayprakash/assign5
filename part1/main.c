@@ -68,8 +68,6 @@ ISR(TIMER1_COMPA_vect)
 {  
 	PORTB ^= 0x20;
   	// toggle Pin 5 of PORTB high/low
-  	TCNT1 = 0;
-  	// Reset Timer1 Count Register
 }
 //*********************************************//
 
@@ -77,6 +75,8 @@ ISR(TIMER1_COMPA_vect)
 //**********Main function**********//
 int main (void)
 {
+	cli();
+	// disable interrupts
 	DDRB |= 0x20;
 	setup_delay();
 	sei();
