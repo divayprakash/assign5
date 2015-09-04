@@ -31,7 +31,7 @@ int main(void)
         if(flag) {							//if flag is set
             cli();							//disable interrupts
             flag = 0;						//set flag to 0	
-            sleep_bod_disable();
+            sleep_bod_disable();			//diable brown-out detection
             sei();							//enable interrupts
             sleep_cpu();                 	//put to sleep with sleep mode as prviously defined
         }
@@ -41,8 +41,10 @@ int main(void)
 
 
 //**********Function to check WDT state at start**********//
-void init_check_wdt(void){
-    if(MCUSR & _BV(WDRF)){                  //if prev reset caused by WDT
+void init_check_wdt(void)
+{
+    if(MCUSR & _BV(WDRF))
+    {                  //if prev reset caused by WDT
         MCUSR &= ~_BV(WDRF);                //clear WDT reset flag
         WDTCSR |= (_BV(WDCE) | _BV(WDE));   //enable WDCE
         WDTCSR = 0x00;                      //disable WDT
@@ -52,7 +54,8 @@ void init_check_wdt(void){
 
 
 //**********Function to setup WDT**********// 
-void setup_wdt(void){
+void setup_wdt(void)
+{
     WDTCSR |= (_BV(WDCE) | _BV(WDE));               //enable WDCE, set WDT to interrupt mode
     WDTCSR =  _BV(WDIE) |  _BV(WDP2) | _BV(WDP1);	//set WDT timeout to ~1 seconds
     WDTCSR |= _BV(WDIE);
@@ -61,7 +64,8 @@ void setup_wdt(void){
 
    
 //**********WDT Interrupt Service Routine**********//   
-ISR(WDT_vect){
+ISR(WDT_vect)
+{
     sleep_disable();	//wake from sleep
     PORTB ^= 0x20;  	//toggle led on/off
     flag = 1;			//set flag to 1
