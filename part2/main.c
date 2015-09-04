@@ -7,11 +7,6 @@
 //*********************************// 
 
 
-//**********Function prototypes**********//
-void init();
-//***************************************// 
-
-
 //**********Global variables**********//
 volatile int flag = 0;    
 //************************************//
@@ -20,26 +15,7 @@ volatile int flag = 0;
 //**********Main function**********// 
 int main(void) 
 {
-    cli();									//disable interrupts
-    init();									//initialiazation function
-    set_sleep_mode(SLEEP_MODE_PWR_DOWN);    //set sleep mode  
-    sei();                                  //enables interrupts
-    while(1) {                              //main loop
-        if(flag) {							//if flag is set
-            cli();							//disable interrupts
-            flag = 0;						//set flag to 0	
-            sleep_bod_disable();			//diable brown-out detection
-            sei();							//enable interrupts
-            sleep_cpu();                 	//put to sleep with sleep mode as prviously defined
-        }
-    }
-}
-//*********************************//
-
-
-//**********Initialize function**********// 
-void init()
-{
+    cli();											//disable interrupts
     if(MCUSR & _BV(WDRF))							//if prev reset caused by WDT
     {                  
         MCUSR &= ~_BV(WDRF);                		//clear WDT reset flag
@@ -50,8 +26,21 @@ void init()
     WDTCSR |= (_BV(WDCE) | _BV(WDE));               //enable WDCE, set WDT to interrupt mode
     WDTCSR =  _BV(WDIE) |  _BV(WDP2) | _BV(WDP1);	//set WDT timeout to ~1 seconds
     WDTCSR |= _BV(WDIE);
+    set_sleep_mode(SLEEP_MODE_PWR_DOWN);    		//set sleep mode  
+    sei();                                  		//enables interrupts
+    while(1) 										//main loop
+    {                              		
+        if(flag) 									//if flag is set
+        {									
+            cli();									//disable interrupts
+            flag = 0;								//set flag to 0	
+            sleep_bod_disable();					//diable brown-out detection
+            sei();									//enable interrupts
+            sleep_cpu();                 			//put to sleep with sleep mode as prviously defined
+        }
+    }
 }
-//***************************************//
+//*********************************//
 
    
 //**********WDT Interrupt Service Routine**********//   
