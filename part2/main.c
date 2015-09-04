@@ -2,7 +2,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
-#include <avr/WDT.h>
+#include <avr/wdt.h>
 #include <avr/power.h>
 //*********************************// 
 
@@ -41,7 +41,7 @@ int main(void)
 
 
 //**********Function to check WDT state at start**********//
-void check_wdt(void){
+void init_check_wdt(void){
     if(MCUSR & _BV(WDRF)){                  //if prev reset caused by WDT
         MCUSR &= ~_BV(WDRF);                //clear WDT reset flag
         WDTCSR |= (_BV(WDCE) | _BV(WDE));   //enable WDCE

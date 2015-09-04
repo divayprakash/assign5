@@ -1,4 +1,4 @@
-CC=avr-gcc
+CC=avr-gcc	
 # compiler collection
 
 MCU=-mmcu=atmega328p
