@@ -32,7 +32,7 @@ all : compile program clean
 # rule for "make all" command
 
 compile : $(SRC).hex
-# compiler rule
+# rule for "make compile" command
 
 $(SRC).hex : $(SRC).elf
 #rule for conversion of elf file to hex file
@@ -54,7 +54,7 @@ $(SRC).s : $(SRC).c
 # -o output file name
 
 program : $(SRC).hex
-# rule to program micro-controller
+# rule for "make program" command to program micro-controller
 	$(UPLOADER) $(BOARD) -p ATmega328P -P $(PORT) -b $(BAUD_RATE) -U flash:w:$<
 
 # -F Normally, avrdude tries to verify that the device signature read from the part is reasonable before continuing.  Since
@@ -69,7 +69,7 @@ program : $(SRC).hex
 
 .PHONY : clean
 clean :
-# rule to clean up s, elf and hex files
+# rule for "make clean" command to clean up s, elf and hex files
 	rm -f *.s
 	rm -f *.elf
 	rm -f *.hex
